@@ -15,3 +15,7 @@ add-highlighter shared/kakrc/lua1 region -recurse '\{' '(^|\h)\K%?lua([\s{}\w@%/
 add-highlighter shared/kakrc/lua2 region -recurse '\(' '(^|\h)\K%?lua([\s{}\w@%/"])* %\(' '\)' ref lua
 add-highlighter shared/kakrc/lua3 region -recurse '\[' '(^|\h)\K%?lua([\s{}\w@%/"])* %\[' '\]' ref lua
 add-highlighter shared/kakrc/lua4 region -recurse '<' '(^|\h)\K%?lua([\s{}\w@%/"])* %<' '>' ref lua
+
+define-command fennel -params 1.. %{ eval %sh{
+    lua $kak_opt_luar_path/fennel.lua "$kak_quoted_$@"
+}}
