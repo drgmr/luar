@@ -4,6 +4,19 @@ local block = {
 	chunk = arg[#arg]
 }
 
+local function debug(text)
+	local first = true
+
+	for line in text:gmatch('[^\n]*') do
+		if first then
+			print(string.format([[echo -debug %%@luar: %s@]], line))
+			first = false
+		else
+			print(string.format([[echo -debug %%@    %s@]], line))
+		end
+	end
+end
+
 local function parseargs()
 	local newarg = {}
 	local i = 0
@@ -32,19 +45,6 @@ local function parseargs()
 	arg = newarg
 end
 
-local function debug(text)
-	local first = true
-
-	for line in text:gmatch('[^\n]*') do
-		if first then
-			print(string.format([[echo -debug %%@luar: %s@]], line))
-			first = false
-		else
-			print(string.format([[echo -debug %%@    %s@]], line))
-		end
-	end
-end
-
 local kak = setmetatable({}, {
 	__index = function(t, command)
 		local name = command:gsub("_", "-")
@@ -64,10 +64,20 @@ local kak = setmetatable({}, {
 
 local function args() return table.unpack(arg) end
 
+local function evalfennel(chunk)
+	local fennel = require "fennel"
+	local ok, options = pcall(require, "fennelfriend") -- `pcall` needed for Fennel < 0.5.0
+	if not ok then options = {} end
+
+	options.filename = "fennel " .. block.name
+	return { pcall(fennel.eval, chunk, options) }
+end
+
 return {
 	parseargs = parseargs,
 	debug = debug,
 	kak = kak,
 	args = args,
 	block = block,
+	eval = evalfennel
 }
