@@ -17,8 +17,6 @@
   (lib.debug (err:gsub ":(%d+)" ": line %1" 1))
   (os.exit 1))
 
-(let [results [(pcall fennel.eval lib.block.chunk options)]] 
-  (when (not (. results 1)) (abort (. results 2)))
-  (when (> (length results) 1)
-    (table.remove results 1)
-    (print (.. "echo " (table.concat results "\t")))))
+(match [(pcall fennel.eval lib.block.chunk options)]
+  [false err] (abort err)
+  ([a & b] ? (> (length b) 0)) (print (.. "echo " (table.concat b "\t"))))
