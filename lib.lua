@@ -64,20 +64,10 @@ local kak = setmetatable({}, {
 
 local function args() return table.unpack(arg) end
 
-local function evalfennel(chunk)
-	local fennel = require "fennel"
-	local ok, options = pcall(require, "fennelfriend") -- `pcall` needed for Fennel < 0.5.0
-	if not ok then options = {} end
-
-	options.filename = "fennel " .. block.name
-	return { pcall(fennel.eval, chunk, options) }
-end
-
 return {
 	parseargs = parseargs,
 	debug = debug,
 	kak = kak,
 	args = args,
 	block = block,
-	eval = evalfennel
 }
