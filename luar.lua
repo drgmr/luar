@@ -1,4 +1,4 @@
-package.path = table.concat(package.path, ";", arg[1], "/?.lua")
+package.path = table.concat {package.path, ";", arg[1], "/?.lua"}
 table.remove(arg, 1) -- Remove plugin path
 
 local lib = require "lib"
